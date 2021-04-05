@@ -19,7 +19,7 @@ Grow your own NixOS based devkit through a bootstrapping process:
 4. When the VM has booted, read README (`cat README`) and execute `./git-clone-installer.sh`
 5. `cd nixos-devkit-installer`
 6. `cat README.md` -- and you are reading this file inside the installer-VM
-7. Ensure that your secrets are mounted: `ls /mnt/hgfs/nixos-devkit-installer-secrets`
+7. Ensure that your secrets and params are mounted: `ls /mnt/hgfs/nixos-devkit-installer-params`
 8. `install.sh`
 9. Read the log (`less install-log.sh`)
 10. If all seems fine, restart the machine: `sudo shutdown -r now`

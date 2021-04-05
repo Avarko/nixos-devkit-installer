@@ -1,0 +1,105 @@
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
+
+  networking = {
+    hostName = "${DEVKIT_HOSTNAME}";
+    useDHCP = false;
+    interfaces.ens33.useDHCP = true;
+    networkmanager.enable = true;
+    firewall.enable = false;
+  };
+
+  # Set your time zone.
+  time.timeZone = "${DEVKIT_TIMEZONE}";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "${DEVKIT_LOCALE}";
+  console = {
+    font = "${DEVKIT_FONT}";
+    keyMap = "${DEVKIT_KEYMAP}";
+  };
+
+  users.users.root = { password = "${DEVKIT_ROOT_PASSWORD}"; };
+  users.groups.${DEVKIT_USERNAME} = {
+    name = "${DEVKIT_USERNAME}";
+    members = [ "${DEVKIT_USERNAME}" ];
+  };
+  users.users.${DEVKIT_USERNAME} = {
+    description = "${DEVKIT_USERNAME}";
+    name = "${DEVKIT_USERNAME}";
+    group = "${DEVKIT_USERNAME}";
+    extraGroups = [ "users" "wheel" "docker" ];
+    isNormalUser = true;
+    password = "${DEVKIT_PASSWORD}";
+    home = "/home/${DEVKIT_USERNAME}";
+    createHome = true;
+    useDefaultShell = true;
+    uid = 1000;
+  };  
+
+  environment.systemPackages = with pkgs; [
+    gitAndTools.gitFull gitAndTools.pre-commit
+    direnv nix-direnv
+    wget curl vim nano
+    zip unzip
+    rng-tools
+  ];
+  # nix options for derivations to persist garbage collection
+  nix.extraOptions = ''
+    keep-outputs = true
+    keep-derivations = true
+  '';
+  environment.pathsToLink = [
+    "/share/nix-direnv"
+  ];
+  
+  services.timesyncd.enable = true;
+  programs.fuse.userAllowOther = true;
+  services.gnome3.gnome-keyring.enable = true;
+
+  nix.allowedUsers = [ "@wheel" ];
+  nix.trustedUsers = [ "root" "@wheel" ];
+  security.sudo.extraConfig =
+    ''
+      Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
+      Defaults:root,%wheel env_keep+=NIX_PATH
+      Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+      Defaults env_keep+=SSH_AUTH_SOCK
+      Defaults lecture = never
+      root   ALL=(ALL) SETENV: ALL
+      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
+    '';
+
+  fileSystems."/mnt/hgfs" = {
+    device = ".host:/";
+    fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
+    options = [ "umask=22" "uid=1000" "gid=1000" "allow_other" "nonempty" "nofail" "defaults" "auto_unmount" ];
+  };
+
+  virtualisation.docker.enable = true;
+  virtualisation.vmware.guest.enable = true;  
+
+  
+  services.xserver = {
+    enable = true;
+    desktopManager = {
+      xfce.enable = true;
+    };
+    displayManager.defaultSession = "xfce";
+    layout = "${DEVKIT_X11_LAYOUT}";
+    xkbOptions = "${DEVKIT_XKB_OPTIONS}";
+  };
+
+  system.stateVersion = "20.09";
+
+}

@@ -1,0 +1,29 @@
+#DEVKIT_HOSTNAME can be anything and doesn't need to be unique
+export DEVKIT_HOSTNAME="nixos-devkit"
+
+#DEVKIT_TIMEZONE: your own timezone
+export DEVKIT_TIMEZONE="Europe/Helsinki"
+
+#DEVKIT_LOCALE: most likely you'll want en_US.UTF-8
+export DEVKIT_LOCALE="en_US.UTF-8"
+
+#DEVKIT_FONT: lat9w-16 is correct for Finnish character set
+export DEVKIT_FONT="lat9w-16"
+
+#DEVKIT_KEYMAP and DEVKIT_X11_LAYOUT: "fi" for Finnish keyboards
+export DEVKIT_KEYMAP="fi"
+export DEVKIT_X11_LAYOUT="fi"
+
+#DEVKIT_ROOT_PASSWORD: you'll probably never need root password with devkit 
+#Anyway, set it and store it in your own password store
+export DEVKIT_ROOT_PASSWORD="changeit"
+
+#DEVKIT_PASSWORD: the password you'll use to login. 
+#Set it and store it in your own password store.
+export DEVKIT_PASSWORD="changeit"
+
+#DEVKIT_USERNAME: the username you'll login with
+export DEVKIT_USERNAME="mylogin"
+export DEVKIT_XKB_OPTIONS="eurosign:e"
+
+

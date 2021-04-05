@@ -34,7 +34,7 @@
 
   programs.fuse.userAllowOther = true;
 
-  fileSystems."/mnt/hgfs" = {
+  fileSystems."/vmware-mount" = {
     device = ".host:/";
     fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
     options = [ "umask=22" "uid=1000" "gid=1000" "allow_other" "nonempty" "nofail" "defaults" "auto_unmount" ];

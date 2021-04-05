@@ -1,0 +1,7 @@
+How to install
+
+$ ./git-clone-installer.sh
+$ cd nixos-devkit-installer
+$ cat README.md and follow instructions
+
+

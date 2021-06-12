@@ -61,7 +61,7 @@
     uid = 1000;
   };  
 
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
       gitAndTools.gitFull gitAndTools.pre-commit
       wget curl vim nano
       zip unzip
@@ -113,6 +113,6 @@
     xkbOptions = "${DEVKIT_XKB_OPTIONS}";
   };
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "20.09";
 
 }

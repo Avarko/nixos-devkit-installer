@@ -1,28 +1,15 @@
-NIXOS_DEVKIT_INSTALLER_PARAMS_MOUNT_DIR="/vmware-mount/nixos-devkit-installer-params"
-SSH_KEYS_DIR="$NIXOS_DEVKIT_INSTALLER_PARAMS_MOUNT_DIR/ssh-keys"
-ENV_PARAMS="$NIXOS_DEVKIT_INSTALLER_PARAMS_MOUNT_DIR/env-params"
+ENV_PARAMS="./env-params"
 
-# Ensure that /mnt/hgfs/nixos-devkit-installer-params exists
-if [ ! -d "$NIXOS_DEVKIT_INSTALLER_PARAMS_MOUNT_DIR" ] 
-then
-    echo "VMware Shared directory nixos-devkit-installer-params is not mounted." 
-    exit 1
-fi
-if [ ! -d "$SSH_KEYS_DIR" ]
-then
-    echo "VMware Shared directory nixos-devkit-installer-params does not contain ssh-keys" ]
-    exit 1
-fi
 if [ ! -f "$ENV_PARAMS" ]
 then
-    echo "VMware Shared directory nixos-devkit-installer-params does not contain file env-params" ]
+    echo "File $ENV_PARAMS not found." ]
     exit 1
 fi
 
 source "$ENV_PARAMS"
 if [ -z ${DEVKIT_USERNAME+x} ]
 then
-    echo "env-params in VMware Shared directory nixos-devkit-installer-params does not contain DEVKIT_USERNAME"
+    echo "File $ENV_PARAMS does not contain DEVKIT_USERNAME"
     exit 1
 fi
 
@@ -42,14 +29,14 @@ sudo nixos-generate-config --root /mnt
 envsubst -i configuration.nix.template -o configuration.nix
 sudo cp configuration.nix /mnt/etc/nixos/configuration.nix
 
-# Create a user directory with .ssh, copy keys
-sudo mkdir -p "/mnt/home/$DEVKIT_USERNAME/.ssh"
-sudo cp -R "$SSH_KEYS_DIR/." "/mnt/home/$DEVKIT_USERNAME/.ssh/"
-sudo chmod 600 "/mnt/home/$DEVKIT_USERNAME/.ssh/*"
-sudo chmod 700 "/mnt/home/$DEVKIT_USERNAME/.ssh"
+# Create a user directory (not really necessary)
+sudo mkdir -p "/mnt/home/$DEVKIT_USERNAME"
 
 # Install NixOS on the disk
-nixos-install --show-trace
+nixos-install --show-trace >install.log 2>&1
 
-#shutdown -r now
+echo "Installation done."
+echo "Please check the log (less install.log) if you wish."
+echo "Then restart the machine: shutdown -r now"
+
 

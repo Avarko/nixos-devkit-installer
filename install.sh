@@ -1,3 +1,7 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p envsubst
+#!nix-shell -i bash
+
 ENV_PARAMS="./env-params"
 
 if [ ! -f "$ENV_PARAMS" ]
@@ -33,10 +37,9 @@ sudo cp configuration.nix /mnt/etc/nixos/configuration.nix
 sudo mkdir -p "/mnt/home/$DEVKIT_USERNAME"
 
 # Install NixOS on the disk
-nixos-install --show-trace >install.log 2>&1
+sudo nixos-install --show-trace
 
 echo "Installation done."
-echo "Please check the log (less install.log) if you wish."
-echo "Then restart the machine: shutdown -r now"
+echo "Restart the machine: shutdown -r now"
 
 

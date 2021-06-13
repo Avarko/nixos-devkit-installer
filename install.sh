@@ -37,7 +37,17 @@ sudo cp configuration.nix /mnt/etc/nixos/configuration.nix
 sudo mkdir -p "/mnt/home/$DEVKIT_USERNAME"
 
 # Install NixOS on the disk
-sudo nixos-install --show-trace --no-root-passwd
+while true
+do
+  sudo nixos-install --show-trace --no-root-passwd
+  EXITCODE=$?
+  if [ $EXITCODE == 0 ]
+  then
+    break
+  else
+    sudo find /mnt/nix/store -iname *.lock | xargs -i sudo rm {}
+  fi
+done
 
 echo "Installation done."
 echo "Restart the machine: shutdown -r now"

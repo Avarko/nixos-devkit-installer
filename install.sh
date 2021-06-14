@@ -45,11 +45,10 @@ do
   then
     break
   else
-    sudo find /mnt/nix/store -iname *.lock | xargs -i sudo rm {}
+    sudo find /mnt/nix/store -iname *.lock | sudo nix-store --repair-path "/nix/store/$(xargs -I{} basename {} .lock)"
   fi
 done
 
-echo "Installation done."
-echo "Restart the machine: shutdown -r now"
+echo "Installation done. Restart the machine."
 
 

@@ -65,6 +65,8 @@
       gitAndTools.gitFull gitAndTools.pre-commit
       wget curl vim nano
       zip unzip
+      lastpass-cli
+      jq yq
     ];
 
 

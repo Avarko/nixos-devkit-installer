@@ -26,4 +26,6 @@ export DEVKIT_PASSWORD="changeit"
 export DEVKIT_USERNAME="mylogin"
 export DEVKIT_XKB_OPTIONS="eurosign:e"
 
+#LASTPASS_USERID: your userid in LastPass for fetching personal and shared devkit secrets
+export LASTPASS_USERID="mylastpassuserid"
 

@@ -33,8 +33,13 @@ sudo nixos-generate-config --root /mnt
 envsubst -i configuration.nix.template -o configuration.nix
 sudo cp configuration.nix /mnt/etc/nixos/configuration.nix
 
-# Create a user directory (not really necessary)
-sudo mkdir -p "/mnt/home/$DEVKIT_USERNAME"
+# Create a user directory and copy artefacts for second phase of installation
+DEVKIT_HOME="/mnt/home/$DEVKIT_USERNAME"
+SECRETS_DIR="$DEVKIT_HOME/.config/personal-devkit-nonsecrets"
+sudo mkdir -p "$SECRETS_DIR"
+echo $LASTPASS_USERID | sudo tee "$SECRETS_DIR/lastpass-userid" > /dev/null
+sudo cp -R nixos-devkit "$DEVKIT_HOME"
+sudo chown -R 1000:1000 "$DEVKIT_HOME"
 
 # Install NixOS on the disk
 while true

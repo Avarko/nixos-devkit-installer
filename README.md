@@ -10,6 +10,6 @@ Simple VMware friendly NixOS Linux installer
 4. `$ unzip install.zip`
 5. `$ cd nixos-devkit-installer-main`
 6. Set the passwords for root and 'devkit' users and store them in your own password safe (`$ nano env-params`)
-7. `$ ./install.sh 2>&1 | tee install.log`
+7. `$ ./install.sh`
 8. Read the log if you wish (`less install.log`)
 9. If all seems fine, restart the machine: `reboot`
